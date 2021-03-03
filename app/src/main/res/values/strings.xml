@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Cours5-Fragment-Communication</string>
+    <string name="enable_counter_update">Enable counter update</string>
+</resources>
