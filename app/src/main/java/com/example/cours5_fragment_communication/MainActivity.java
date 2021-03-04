@@ -6,12 +6,14 @@ import android.os.PersistableBundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 /**
- * J'implemente les  interfaces de chacun de mes fragments et leurs methodes
- * afin de pouvoire apppeler des fonctions dasn l'activity depuis les fragments via leur interface
+ * J'implemente l' interface du fragments et sa methode
+ * afin de pouvoire apppeler des fonctions dasn l'activity depuis le fragments via son interface
  */
-public class MainActivity extends AppCompatActivity implements ActionFragment.ActionFragmentListener
-        , DisplayFragment.DisplayFragmentListener {
+public class MainActivity extends AppCompatActivity implements ActionFragment.ActionFragmentListener {
 
     private static final String IS_RECREATE_KEY = "IS_RECREATE_KEY";
 
@@ -60,25 +62,11 @@ public class MainActivity extends AppCompatActivity implements ActionFragment.Ac
 
     /**
      * Fonction appele depuis ActionFragment via mlistener.onCounterChanged(counter)
-     *
      * @param counter parametre recu depuis ActionFragment
      */
     @Override
     public void onCounterChanged(int counter) {
         displayCounterInFragment(counter);
-    }
-
-    /**
-     * fonction appele depuis DisplayFragment via mListener.onstopClick(b)
-     *
-     * @param enableButtons parametre recu de DisplayFragment
-     */
-    @Override
-    public void onStopClick(boolean enableButtons) {
-        ActionFragment actionFragment = ((ActionFragment) getSupportFragmentManager().findFragmentByTag(ActionFragment.TAG));
-        if (actionFragment != null) {
-            actionFragment.enableActionBtns(enableButtons);
-        }
     }
 
 }

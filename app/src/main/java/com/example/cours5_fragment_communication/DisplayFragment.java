@@ -1,6 +1,5 @@
 package com.example.cours5_fragment_communication;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,34 +12,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class DisplayFragment extends Fragment {
 
     public static final String TAG = DisplayFragment.class.getSimpleName();
     private static final String COUNTER_KEY = "COUNTER_KEY";
     private TextView mCounterTv;
     private SwitchCompat mEnableCounterUpdateSwitch;
-    private DisplayFragmentListener mListener;
 
     public static DisplayFragment newInstance() {
         DisplayFragment displayFragment = new DisplayFragment();
         return displayFragment;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof DisplayFragmentListener){
-            //context est l'instance de l'activity qui acceuil mon fragment
-            //je le cast pour le reagrder uniquement selon l'aspect qu'a l'activity d'implementer l'interface
-            //et donc en extrait que cette aspect que je met dans ma variable mListener
-            //exemple de classe bonhome + interface capaciteDeCuisine
-            //Je ne peux creer d'instance de l'interface , on ne peut prendre le concepte capacite de cuisine dasn la main (un bonhome oui!)
-            //par contre je peux prendre un bonhome dans la main et ne garder que son aspect de bonhome qui a des capacites de cuisine
-            mListener = (DisplayFragmentListener) context;
-        }else {
-            throw new RuntimeException(context.toString()
-                    + " must implement DisplayFragmentListener");
-        }
     }
 
     @Override
@@ -76,7 +59,11 @@ public class DisplayFragment extends Fragment {
         mEnableCounterUpdateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mListener.onStopClick(b);
+                //je Post un evenemnt eventbus en lui passant en parametre une instance de EnableButtonsEvent
+                // les fonctions qui recoivent en parametre un objet de type EnableButtonsEvent
+                // et qui se trouve dans une activity ou un fragment qui est a l'ecoute de eventBus (register dans onStart)
+                //seront appelees et recevront cette instance de EnableButtonsEvent en parametre (et donc galement b)
+                EventBus.getDefault().post(new EnableButtonsEvent(b));
             }
         });
     }
@@ -86,11 +73,4 @@ public class DisplayFragment extends Fragment {
         mEnableCounterUpdateSwitch = view.findViewById(R.id.FD_stop_switch);
     }
 
-    /**
-     * interface implemente dasn l'activity
-     * et type de ma variable listener qui me permet d'appeler la fonction onStopClick implemente dasn l'activity
-     */
-    public interface DisplayFragmentListener{
-        void onStopClick(boolean enableButtons);
-    }
 }

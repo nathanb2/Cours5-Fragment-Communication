@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 public class ActionFragment extends Fragment {
 
     public static final String TAG = ActionFragment.class.getSimpleName();
@@ -40,6 +43,24 @@ public class ActionFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement ActionFragmentListener");
         }
+    }
+
+    /**
+     * indique au fragment qu'il doit etre a l'ecoute des evenement post avec eventbus dasn toute l'application
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    /**
+     * indique au fragment d'arreter d'etre a l'ecoute des evenement post avec eventbus
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -86,13 +107,20 @@ public class ActionFragment extends Fragment {
         mPlusBtn = view.findViewById(R.id.FA_plus_btn);
     }
 
-    public void enableActionBtns(boolean enableButtons){
-        mMinusBtn.setEnabled(enableButtons);
-        mPlusBtn.setEnabled(enableButtons);
+    /**
+     * Subscribe indique que cette fonction [peut etre appele par eventBus
+     * Fonction pouvant etre appele par un post eventbus
+     * @param enableButtons de type EnableButtonsEvent qui est l'evenement post quand l'on veut appeler cette fonction avec eventBus
+     *                      C'est parceque la fonction recoit ce parametre (de ce type) qu'elle est appele quand un evenement est post avec une instance de cette evenement en parametre
+     */
+    @Subscribe
+    public void enableActionBtns(EnableButtonsEvent enableButtons){
+        mMinusBtn.setEnabled(enableButtons.isEnableButtons());
+        mPlusBtn.setEnabled(enableButtons.isEnableButtons());
     }
 
     /**
-     * interface implemente dasn l'activity
+     * interface implement dans l'activity
      * et type de ma variable listener qui me permet d'appeler la fonction onCounterChanged implemente dasn l'activity
      */
     public interface ActionFragmentListener{
