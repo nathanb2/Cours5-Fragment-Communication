@@ -36,6 +36,20 @@ Pour sauvegarder des donnees en cas de destruction de l'activity ou du fragment 
 - on utilise onSaveInstanceState pour inserer nos donnees dans le Bundle recu en parametre
 - Bundle que l'on recupere dans les differentes fonctions de creation du lifeCycle
 
+Pour appeler une fonction se trouvant dans un Fragment ou une activity (et transmetre des informations) directement de nimporte quel endroit du projet
+
+- On utilise eventBus https://github.com/greenrobot/EventBus
+- On cree un evenement qui est une simple class
+- On post un evenment de la ou on le souhaite en passant en parametre une instance de la class cree pour cet evenement precedement
+- Dans l'activity ou le fragment on dit que l'on est a l'ecoute des evenemenets eventbus en register dasn onStart (pas oublie d'arreter l'ecoute dasn onStop avec unregister)
+- On annote la fonction que l'poon souhaite appele quand cet evenement est emis avec @Subscribe
+- On declare que cette fonction recoit en parametre un objet du type de l'evenment dulequel on souhaite etre a l'ecoute
+
+Pour communiquer entre 2 fragments
+
+- On utilise l'interface quand il est vraiment indispensable que l'activity soit a l'ecoute de l'evenement emis par le fragment 
+- Et EventBus dasn les autres cas
+
 
 ressources: slide 1.2
 https://drive.google.com/drive/folders/1MRqvBGEDtNtpDyKd8sulMJreFCz1JxgC?usp=sharing
