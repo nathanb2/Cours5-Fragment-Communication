@@ -31,5 +31,11 @@ Pour communiquer d'un Fragment a une Activity:
 - Dans fragment B updateView(int counter) pourra par exemple afficher la valeur du compteur dans un textview
 
 
+Pour sauvegarder des donnees en cas de destruction de l'activity ou du fragment et recreation automatique par Android de ceux ci (cas de rotation)
+
+- on utilise onSaveInstanceState pour inserer nos donnees dans le Bundle recu en parametre
+- Bundle que l'on recupere dans les differentes fonctions de creation du lifeCycle
+
+
 ressources: slide 1.2
 https://drive.google.com/drive/folders/1MRqvBGEDtNtpDyKd8sulMJreFCz1JxgC?usp=sharing
