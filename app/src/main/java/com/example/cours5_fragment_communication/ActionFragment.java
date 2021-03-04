@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 public class ActionFragment extends Fragment {
 
     public static final String TAG = ActionFragment.class.getSimpleName();
+    private static final String COUNTER_KEY = "COUNTER_KEY";
     private Button mMinusBtn;
     private Button mPlusBtn;
     private int counter;
@@ -39,6 +40,20 @@ public class ActionFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement ActionFragmentListener");
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey(COUNTER_KEY)) {
+            counter = savedInstanceState.getInt(COUNTER_KEY);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(COUNTER_KEY, counter);
+        super.onSaveInstanceState(outState);
     }
 
     @Nullable

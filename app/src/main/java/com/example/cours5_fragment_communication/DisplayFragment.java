@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 public class DisplayFragment extends Fragment {
 
     public static final String TAG = DisplayFragment.class.getSimpleName();
+    private static final String COUNTER_KEY = "COUNTER_KEY";
     private TextView mCounterTv;
     private SwitchCompat mEnableCounterUpdateSwitch;
     private DisplayFragmentListener mListener;
@@ -42,6 +43,12 @@ public class DisplayFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt(COUNTER_KEY, Integer.parseInt(mCounterTv.getText().toString()));
+        super.onSaveInstanceState(outState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,7 +61,11 @@ public class DisplayFragment extends Fragment {
 
         initVars(view);
         initListener();
-        updateView(0);
+        int counter = 0;
+        if (savedInstanceState != null && savedInstanceState.containsKey(COUNTER_KEY)){
+            counter = savedInstanceState.getInt(COUNTER_KEY);
+        }
+        updateView(counter);
     }
 
     public void updateView(int counter) {
